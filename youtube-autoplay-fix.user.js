@@ -3,8 +3,8 @@
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=youtube.com
 // @namespace    https://github.com/Sikarii/Userscripts
 // @description  Fixes YouTube autoplay not working past 400 entries
-// @version      1.0.0
-// @match        https://www.youtube.com/watch*
+// @version      1.0.1
+// @match        https://www.youtube.com/watch*&list=*
 // @grant        none
 // ==/UserScript==
 
