@@ -3,7 +3,7 @@
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=twitch.tv
 // @namespace    https://github.com/Sikarii/Userscripts
 // @description  Stops Twitch from autoplaying featured streams
-// @version      1.0.0
+// @version      1.0.1
 // @match        https://www.twitch.tv/*
 // @grant        none
 // ==/UserScript==
@@ -17,10 +17,8 @@ const observerOptions = {
   characterData: true,
 };
 
-const getElement = (selector, el) => {
-  const parent = el ?? document.documentElement;
-
-  return new Promise((resolve) => {
+const getElement = (selector, timeoutMs = 10000, parent = document.documentElement) => {
+  const findPromise = new Promise((resolve) => {
      // Return immediately if found
      const el = parent.querySelector(selector);
      if (el) {
@@ -40,6 +38,18 @@ const getElement = (selector, el) => {
 
     observer.observe(parent, observerOptions);
   });
+
+  const timeoutPromise = new Promise((_, reject) =>
+    setTimeout(
+      () => reject(new Error("Could not find element in time")),
+      timeoutMs,
+    )
+  );
+
+  return Promise.race([
+    findPromise,
+    timeoutPromise,
+  ]);
 };
 
 const onLocationChange = (userCb) => {
